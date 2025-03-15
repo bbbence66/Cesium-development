@@ -15,7 +15,8 @@ module.exports = {
     app: "./src/index.js",
   },
   output: {
-    filename: isProduction ? "app.[contenthash].js" : "app.js",
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].[contenthash].js',
     path: path.resolve(__dirname, "dist"),
     sourcePrefix: "",
     clean: true, // Clean the dist folder before each build
@@ -80,8 +81,15 @@ module.exports = {
   },
   optimization: {
     minimize: isProduction,
+    runtimeChunk: 'single',
     splitChunks: {
-      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
     },
   },
   performance: {
