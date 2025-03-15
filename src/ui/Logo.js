@@ -14,7 +14,7 @@ export const createLogo = () => {
   
   // Create the image element
   const logoImage = document.createElement('img');
-  logoImage.src = 'assets/images/ScanAudit-Logo.png'; // Path relative to the public directory
+  logoImage.src = 'assets/images/ScanAudit Logo.png'; // Updated to use the correct filename with space
   logoImage.alt = 'ScanAudit Logo';
   
   // Assemble and add to DOM
