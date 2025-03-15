@@ -3,6 +3,8 @@
  * Panel for controlling visual settings of the scene.
  */
 
+import { initializeVisualSettings } from './VisualSettingsHandler';
+
 /**
  * Generates the HTML content for the Visual Settings panel
  * @returns {string} HTML content
@@ -199,4 +201,18 @@ export const getVisualSettingsPanelContent = () => {
   `;
 };
 
-export default getVisualSettingsPanelContent; 
+/**
+ * Initialize the visual settings panel functionality
+ * @param {Object} viewer - The Cesium viewer instance
+ */
+export const initializeVisualSettingsPanel = (viewer) => {
+  // Initialize the settings functionality after the panel content is loaded
+  setTimeout(() => {
+    initializeVisualSettings(viewer);
+  }, 100);
+};
+
+export default {
+  getVisualSettingsPanelContent,
+  initializeVisualSettingsPanel
+}; 

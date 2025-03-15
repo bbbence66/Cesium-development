@@ -21,14 +21,14 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  padding: 10px 0;
+  padding: 6px 0;
   width: 50px;
   pointer-events: auto; /* Capture clicks */
 }
 
 /* Individual icon container */
 .sidebar-icon-container {
-  padding: 8px 0;
+  padding: 5px 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,7 +54,7 @@
   transform: translateY(-50%);
   background: rgba(0, 0, 0, 0.8);
   color: white;
-  padding: 5px 10px;
+  padding: 3px 10px;
   border-radius: 4px;
   font-size: 12px;
   white-space: nowrap;
@@ -89,13 +89,13 @@
 .sidebar-panel {
   position: absolute;
   left: 10px;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%) translateX(-20px);
   background: rgba(40, 44, 52, 0.95);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   width: 300px;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  transform: translateX(-20px);
   opacity: 0;
   pointer-events: none;
   overflow: hidden;
@@ -103,7 +103,7 @@
 }
 
 .sidebar-panel.active {
-  transform: translateX(0);
+  transform: translateY(-50%) translateX(0);
   opacity: 1;
   pointer-events: auto;
 }
@@ -111,7 +111,7 @@
 /* Panel header */
 .sidebar-panel-header {
   background: rgba(30, 33, 40, 0.95);
-  padding: 12px 16px;
+  padding: 8px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
@@ -148,14 +148,26 @@
 
 /* Panel content */
 .sidebar-panel-content {
-  padding: 16px;
+  padding: 10px;
   max-height: 70vh;
   overflow-y: auto;
 }
 
+/* Override for tall panels to prevent them from going off-screen */
+@media (max-height: 768px) {
+  .sidebar-panel {
+    max-height: 90vh;
+    overflow-y: hidden;
+  }
+  
+  .sidebar-panel-content {
+    max-height: calc(90vh - 42px);
+  }
+}
+
 /* Separator line between icons */
 .sidebar-separator {
-  margin: 8px 10px;
+  margin: 5px 10px;
   height: 1px;
   background-color: rgba(255, 255, 255, 0.2);
 } 

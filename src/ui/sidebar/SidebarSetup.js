@@ -7,18 +7,22 @@ import { sidebarManager } from './SidebarManager';
 import icons from './icons/SidebarIcons';
 
 // Import panel contents
-import getVisualSettingsPanelContent from './panels/VisualSettingsPanel';
+import visualSettingsModule from './panels/VisualSettingsPanel';
 import getPerformancePanelContent from './panels/PerformancePanel';
 import getNavigationPanelContent from './panels/NavigationPanel';
 import getNotesPanelContent from './panels/NotesPanel';
 import getMeasurementPanelContent from './panels/MeasurementPanel';
 import getClippingPanelContent from './panels/ClippingPanel';
 
+// Import CSS for visual settings
+import '../../css/visual-settings.css';
+
 /**
  * Initialize the sidebar with all tools
+ * @param {Object} viewer - The Cesium viewer instance
  * @returns {Object} The sidebar manager instance
  */
-export const initializeSidebar = () => {
+export const initializeSidebar = (viewer) => {
   // Initialize the sidebar
   sidebarManager.init();
   
@@ -30,8 +34,12 @@ export const initializeSidebar = () => {
     icon: icons.visualSettings,
     tooltip: 'Visual Settings',
     title: 'Visual Settings',
-    content: getVisualSettingsPanelContent(),
-    group: 'settings'
+    content: visualSettingsModule.getVisualSettingsPanelContent(),
+    group: 'settings',
+    onOpen: () => {
+      // Initialize the visual settings functionality when the panel is opened
+      visualSettingsModule.initializeVisualSettingsPanel(viewer);
+    }
   });
 
   // Performance Tool
