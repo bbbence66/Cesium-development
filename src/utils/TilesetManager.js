@@ -20,6 +20,52 @@ export class TilesetManager {
   constructor(viewer) {
     this.viewer = viewer;
     this.tilesets = {};
+    this.osmBuildingsTileset = null; // Store reference to OSM Buildings tileset
+  }
+
+  /**
+   * Set the OSM Buildings tileset reference
+   * @param {Cesium3DTileset} tileset - The OSM Buildings tileset
+   */
+  setOsmBuildingsTileset(tileset) {
+    this.osmBuildingsTileset = tileset;
+    console.log("OSM Buildings tileset reference saved");
+  }
+
+  /**
+   * Toggle the visibility of OSM Buildings
+   * @param {boolean} [force] - Force a specific state (if not provided, will toggle)
+   * @returns {boolean} The new visibility state
+   */
+  toggleOsmBuildings(force) {
+    if (!this.osmBuildingsTileset) {
+      console.warn("OSM Buildings tileset not found");
+      
+      // Fallback: Try to find the OSM Buildings tileset in the scene primitives
+      const primitives = this.viewer.scene.primitives;
+      for (let i = 0; i < primitives.length; i++) {
+        const primitive = primitives.get(i);
+        // Look for 3D Tileset with Cesium3DTileset properties
+        if (primitive && primitive.hasOwnProperty('tileVisible') && 
+            primitive.hasOwnProperty('maximumScreenSpaceError') &&
+            primitive !== this.tilesets[Object.keys(this.tilesets)[0]]?.cesiumTileset) {
+          this.osmBuildingsTileset = primitive;
+          console.log("OSM Buildings tileset found and referenced");
+          break;
+        }
+      }
+      
+      if (!this.osmBuildingsTileset) {
+        console.error("Could not find OSM Buildings tileset");
+        return false;
+      }
+    }
+    
+    // Toggle or force the visibility state
+    const newState = force !== undefined ? force : !this.osmBuildingsTileset.show;
+    this.osmBuildingsTileset.show = newState;
+    console.log(`Toggled OSM Buildings: ${newState ? 'ON' : 'OFF'}`);
+    return newState;
   }
 
   /**

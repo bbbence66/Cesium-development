@@ -293,28 +293,29 @@ function navigateToDataset(tilesetManager, tilesetId) {
  * @param {boolean} [force] - Force a specific state (if not provided, will toggle)
  */
 function toggleBuildings(viewer, force) {
-  if (!viewer || !viewer.scene || !viewer.scene.primitives) {
-    console.warn('Viewer not available');
+  if (!viewer || !viewer.tilesetManager) {
+    console.warn('Viewer or TilesetManager not available');
+    
+    // Fallback to old method if tilesetManager is not attached to viewer
+    if (viewer && viewer.scene && viewer.scene.primitives) {
+      const primitives = viewer.scene.primitives;
+      for (let i = 0; i < primitives.length; i++) {
+        const primitive = primitives.get(i);
+        if (primitive && primitive.hasOwnProperty('tileVisible') && 
+            primitive.hasOwnProperty('maximumScreenSpaceError')) {
+            
+          const newState = force !== undefined ? force : !primitive.show;
+          primitive.show = newState;
+          console.log(`Toggled buildings using fallback method: ${newState ? 'ON' : 'OFF'}`);
+          break;
+        }
+      }
+    }
     return;
   }
   
-  // Find the buildings tileset
-  // Note: This is a simplified approach. In a real app, you might want to
-  // tag your buildings tileset or store a reference to it for easier access
-  const primitives = viewer.scene.primitives;
-  for (let i = 0; i < primitives.length; i++) {
-    const primitive = primitives.get(i);
-    // Check if this is likely the buildings tileset
-    // This is a heuristic and might need adjusting based on your specific setup
-    if (primitive && primitive.hasOwnProperty('tileVisible') && 
-        primitive.hasOwnProperty('maximumScreenSpaceError')) {
-        
-      const newState = force !== undefined ? force : !primitive.show;
-      primitive.show = newState;
-      console.log(`Toggled buildings: ${newState ? 'ON' : 'OFF'}`);
-      break;
-    }
-  }
+  // Use the new method from TilesetManager
+  viewer.tilesetManager.toggleOsmBuildings(force);
 }
 
 /**

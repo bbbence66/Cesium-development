@@ -37,12 +37,18 @@ import {
       terrain: Terrain.fromWorldTerrain(),
     });
     
+    // Create our tileset manager
+    const tilesetManager = new TilesetManager(viewer);
+    
+    // Store the TilesetManager instance on the viewer for easy access
+    viewer.tilesetManager = tilesetManager;
+    
     // Add Cesium OSM Buildings, a global 3D buildings layer.
     const buildingTileset = await createOsmBuildingsAsync();
     viewer.scene.primitives.add(buildingTileset);
     
-    // Create our tileset manager
-    const tilesetManager = new TilesetManager(viewer);
+    // Store a reference to the OSM buildings in the TilesetManager
+    tilesetManager.setOsmBuildingsTileset(buildingTileset);
     
     // Add the ScanAudit logo
     createLogo();
