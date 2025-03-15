@@ -1,0 +1,204 @@
+/**
+ * Dataset Selector Styles
+ * Controls for toggling datasets and buildings
+ */
+
+.dataset-selector-container {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(38, 38, 38, 0.85);
+  color: #fff;
+  border-radius: 4px;
+  z-index: 1000;
+  width: 250px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* Header always visible */
+.dataset-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: rgba(30, 30, 30, 0.95);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  user-select: none;
+}
+
+.dataset-selector-header:hover {
+  background-color: rgba(40, 40, 40, 0.95);
+}
+
+.dataset-selector-title {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.dataset-selector-title .icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.dataset-selector-toggle {
+  transition: transform 0.2s ease;
+}
+
+.dataset-selector-toggle.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown panel */
+.dataset-selector-dropdown {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+}
+
+.dataset-selector-dropdown.open {
+  max-height: 300px;
+  opacity: 1;
+  overflow-y: auto;
+}
+
+/* Dataset list */
+.dataset-list {
+  padding: 10px 0;
+}
+
+/* Item styling */
+.dataset-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 15px;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+/* Style for navigable items */
+.dataset-item.navigable {
+  cursor: pointer;
+}
+
+.dataset-item.navigable:hover {
+  background-color: rgba(60, 60, 60, 0.8);
+  color: #4d90fe;
+}
+
+.dataset-item.navigable:active {
+  background-color: rgba(70, 70, 70, 0.9);
+  color: #3a7be0;
+}
+
+/* Non-navigable items (like buildings) still have hover effect but no color change */
+.dataset-item:not(.navigable):hover {
+  background-color: rgba(60, 60, 60, 0.6);
+}
+
+.dataset-item.disabled {
+  opacity: 0.6;
+}
+
+/* Dataset name with icon */
+.dataset-name {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  flex-grow: 1;
+}
+
+.dataset-name .icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+/* Toggle switch styling */
+.dataset-toggle {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 16px;
+  z-index: 2; /* Ensure toggle is above the item for clicks */
+}
+
+.dataset-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #444;
+  transition: .3s;
+  border-radius: 16px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: #4d90fe;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(14px);
+}
+
+/* Separator line */
+.dataset-separator {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 8px 15px;
+}
+
+/* Toggle all button */
+.toggle-all-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(30, 30, 30, 0.95);
+  color: #fff;
+  border: none;
+  width: calc(100% - 30px);
+  margin: 0 15px 10px;
+  padding: 8px 0;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.toggle-all-button:hover {
+  background-color: rgba(60, 60, 60, 0.95);
+}
+
+.toggle-all-button .icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+} 

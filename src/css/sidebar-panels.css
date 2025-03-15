@@ -1,0 +1,601 @@
+/**
+ * Sidebar Panel Content Styles
+ * Styles for the contents of sidebar panels.
+ */
+
+/* Common Panel Styles */
+.settings-section {
+  margin-bottom: 20px;
+}
+
+.settings-section h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #f5f5f5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 6px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.settings-row label {
+  flex: 1;
+  font-size: 13px;
+  color: #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+.settings-row label .icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.settings-row input[type="range"],
+.settings-row select {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #f5f5f5;
+  height: 30px;
+  border-radius: 4px;
+}
+
+.settings-row input[type="range"] {
+  height: 5px;
+  border-radius: 2px;
+}
+
+.settings-row input[type="range"]::-webkit-slider-thumb {
+  background-color: #4285f4;
+}
+
+.settings-row select {
+  padding: 0 8px;
+}
+
+.settings-row .value-display {
+  margin-left: 8px;
+  min-width: 30px;
+  text-align: center;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.checkbox-row,
+.radio-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.checkbox-row label,
+.radio-row label {
+  margin-left: 8px;
+  font-size: 13px;
+  color: #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-row label .icon,
+.radio-row label .icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+/* Button Styles */
+.settings-button,
+.performance-button,
+.navigation-button,
+.measurement-action-button,
+.clipping-action-button,
+.notes-action-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #f5f5f5;
+  font-size: 13px;
+  cursor: pointer;
+  margin-right: 8px;
+  transition: background-color 0.2s;
+}
+
+.settings-button:hover,
+.performance-button:hover,
+.navigation-button:hover,
+.measurement-action-button:hover,
+.clipping-action-button:hover,
+.notes-action-button:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.settings-button.primary,
+.performance-button.primary,
+.navigation-button.primary,
+.measurement-action-button.primary,
+.clipping-action-button.primary,
+.notes-action-button.primary {
+  background-color: #4285f4;
+  color: white;
+}
+
+.settings-button.primary:hover,
+.performance-button.primary:hover,
+.navigation-button.primary:hover,
+.measurement-action-button.primary:hover,
+.clipping-action-button.primary:hover,
+.notes-action-button.primary:hover {
+  background-color: #5294ff;
+}
+
+.settings-button.secondary,
+.performance-button.secondary,
+.navigation-button.secondary,
+.measurement-action-button.secondary,
+.clipping-action-button.secondary,
+.notes-action-button.secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f0f0f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.settings-button.secondary:hover,
+.performance-button.secondary:hover,
+.navigation-button.secondary:hover,
+.measurement-action-button.secondary:hover,
+.clipping-action-button.secondary:hover,
+.notes-action-button.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Performance Panel Styles */
+.performance-stats {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #ccc;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #f5f5f5;
+}
+
+/* Measurement Tools Styles */
+.tools-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.tool-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+  min-width: 60px;
+  color: #f5f5f5;
+}
+
+.tool-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.tool-button.active {
+  background-color: rgba(66, 133, 244, 0.3);
+  border-color: #4285f4;
+}
+
+.tool-icon {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.tool-label {
+  font-size: 11px;
+  color: #ccc;
+}
+
+/* Measurements List Styles */
+.measurements-list,
+.notes-list,
+.clipping-planes-list,
+.bookmarks-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.measurement-item,
+.note-item,
+.clipping-plane-item,
+.bookmark-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.measurement-item:last-child,
+.note-item:last-child,
+.clipping-plane-item:last-child,
+.bookmark-item:last-child {
+  border-bottom: none;
+}
+
+.measurement-info,
+.note-header,
+.clipping-plane-info {
+  flex: 1;
+}
+
+.measurement-type,
+.note-title,
+.clipping-plane-type,
+.bookmark-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #f5f5f5;
+}
+
+.measurement-value,
+.clipping-plane-position {
+  display: block;
+  font-size: 12px;
+  color: #ccc;
+}
+
+.note-type {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 6px;
+  background-color: rgba(66, 133, 244, 0.3);
+  color: #4285f4;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+
+.note-body {
+  font-size: 12px;
+  color: #ccc;
+  margin: 5px 0;
+}
+
+.measurement-actions,
+.note-actions,
+.clipping-plane-actions,
+.bookmark-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.measurement-button,
+.note-action-button,
+.clipping-button,
+.bookmark-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  padding: 0;
+  color: #f5f5f5;
+}
+
+.measurement-button:hover,
+.note-action-button:hover,
+.clipping-button:hover,
+.bookmark-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Notes Panel Styles */
+.note-creation {
+  margin-bottom: 15px;
+}
+
+.note-input-group {
+  margin-bottom: 10px;
+}
+
+.note-input-group label {
+  display: block;
+  font-size: 13px;
+  color: #f0f0f0;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.note-input-group label .icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.note-input-group input,
+.note-input-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 13px;
+  resize: vertical;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #f5f5f5;
+}
+
+.note-input-group input:focus,
+.note-input-group textarea:focus {
+  border-color: #4285f4;
+  outline: none;
+}
+
+.note-type-selection {
+  margin-bottom: 15px;
+}
+
+.note-type-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.note-type-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+  color: #f5f5f5;
+}
+
+.note-type-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.note-type-button.active {
+  background-color: rgba(66, 133, 244, 0.3);
+  border-color: #4285f4;
+}
+
+.note-type-icon {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.notes-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.notes-search {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 13px;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #f5f5f5;
+}
+
+.notes-filter-select {
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 13px;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #f5f5f5;
+}
+
+/* Navigation Panel Styles */
+.camera-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.preset-button {
+  flex: 1;
+  min-width: 70px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  color: #f5f5f5;
+}
+
+.preset-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.coordinates-display {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.coordinate-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.coordinate-row label {
+  width: 25px;
+  font-size: 13px;
+  color: #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+.coordinate-row label .icon {
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.coordinate-input {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: right;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #f5f5f5;
+}
+
+.navigation-button.small {
+  margin-top: 8px;
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+/* Clipping Panel Styles */
+.coordinates-inputs {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.coordinates-inputs input {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 13px;
+  text-align: right;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #f5f5f5;
+}
+
+/* Info Panel Styles */
+.info-content {
+  font-size: 13px;
+  color: #f0f0f0;
+}
+
+.info-content h4 {
+  margin: 15px 0 10px 0;
+  font-size: 14px;
+  color: #f5f5f5;
+}
+
+.info-content h4:first-child {
+  margin-top: 0;
+}
+
+.info-content p {
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+}
+
+.shortcut-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+}
+
+.shortcut-list li {
+  margin-bottom: 5px;
+}
+
+.shortcut-list .key,
+.shortcut-list .action {
+  display: inline-block;
+  padding: 2px 6px;
+  margin-right: 8px;
+  font-family: monospace;
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  min-width: 70px;
+  text-align: center;
+  color: #ccc;
+}
+
+/* Input fields in dark theme */
+input[type="color"] {
+  width: 40px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #4285f4;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+} 

@@ -1,0 +1,24 @@
+/**
+ * Logo Styles
+ * Styling for the ScanAudit logo in the top left corner
+ */
+
+.logo-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background-color: rgba(30, 30, 30, 0.7);
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-container img {
+  height: 80px;
+  width: auto;
+  display: block;
+} 
