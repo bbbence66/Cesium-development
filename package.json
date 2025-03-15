@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "node_modules/.bin/webpack --config webpack.config.js",
-    "start": "node_modules/.bin/webpack serve --config webpack.config.js --open"
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "start": "webpack serve --config webpack.config.js --open"
   },
   "author": "bence",
   "license": "ISC",
@@ -12,6 +12,7 @@
   "devDependencies": {
     "cesium": "^1.127.0",
     "copy-webpack-plugin": "^13.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.3",
     "style-loader": "^4.0.0",
