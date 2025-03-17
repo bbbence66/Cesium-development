@@ -26,7 +26,7 @@ import {
   import { createLogo } from './ui/Logo';
   
   // Your access token can be found at: https://cesium.com/ion/tokens.
-  // Ion.defaultAccessToken = "YOUR TOKEN HERE";
+  Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxMmUwMWI1My1kZTE3LTRjN2QtYjU4OS1mZDM0ODNlYjk1MjYiLCJpZCI6MjgyODY0LCJpYXQiOjE3NDE1OTk1MDN9.N6iesXHoMViCX6RW5EC4z1wmpB3V0bN4V95WvAx3wF8";
   
   /**
    * Main application entry point
