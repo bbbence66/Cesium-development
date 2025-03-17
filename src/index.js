@@ -25,6 +25,12 @@ import {
   import { createDatasetSelector } from './ui/DatasetSelector';
   import { createLogo } from './ui/Logo';
   
+  // Import service worker registration utility
+  import { registerServiceWorker } from './utils/serviceWorkerRegistration';
+  
+  // Import cache indicator
+  import { initCacheIndicator } from './utils/CacheIndicator';
+  
   // Your access token can be found at: https://cesium.com/ion/tokens.
   Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxMmUwMWI1My1kZTE3LTRjN2QtYjU4OS1mZDM0ODNlYjk1MjYiLCJpZCI6MjgyODY0LCJpYXQiOjE3NDE1OTk1MDN9.N6iesXHoMViCX6RW5EC4z1wmpB3V0bN4V95WvAx3wF8";
   
@@ -32,6 +38,16 @@ import {
    * Main application entry point
    */
   async function startApp() {
+    // Register the service worker for PNTS file caching
+    registerServiceWorker().then(registration => {
+      if (registration) {
+        console.log('Service worker registered for caching PNTS files');
+        
+        // Initialize the cache indicator
+        initCacheIndicator();
+      }
+    });
+    
     // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
     const viewer = new Viewer("cesiumContainer", {
       terrain: Terrain.fromWorldTerrain(),
