@@ -22,8 +22,10 @@ export let ENABLE_FRUSTUM_CULLING = true;
 
 /**
  * Debug options for visualizing culling behavior
+ * When true, shows red planes representing the view frustum
+ * Set to false if you don't want to see the red visualization
  */
-export const DEBUG_SHOW_FRUSTUM_CULLING = true; // Shows visual indicators for culled tiles
+export const DEBUG_SHOW_FRUSTUM_CULLING = false; // Disabled by default to avoid red visualization
 
 /**
  * How aggressively to unload tiles outside view
@@ -198,8 +200,9 @@ export function getTilesetOptions() {
  * Toggle frustum culling at runtime for testing purposes
  * @param {Cesium.Viewer} viewer - The Cesium viewer instance
  * @param {boolean} enable - Whether to enable or disable frustum culling
+ * @param {boolean} [showDebugVisualization=false] - Whether to show red debug visualization
  */
-export function toggleFrustumCullingForTesting(viewer, enable) {
+export function toggleFrustumCullingForTesting(viewer, enable, showDebugVisualization = false) {
   if (!viewer) return;
   
   // Update global setting
@@ -230,10 +233,10 @@ export function toggleFrustumCullingForTesting(viewer, enable) {
     }
   });
   
-  // Toggle debug visualization
-  viewer.scene.debugShowFrustumPlanes = DEBUG_SHOW_FRUSTUM_CULLING && enable;
-  viewer.scene.debugShowFrustums = DEBUG_SHOW_FRUSTUM_CULLING && enable;
-  viewer.scene.debugShowFrustumCulling = DEBUG_SHOW_FRUSTUM_CULLING && enable;
+  // Toggle debug visualization only if explicitly requested
+  viewer.scene.debugShowFrustumPlanes = showDebugVisualization && enable;
+  viewer.scene.debugShowFrustums = showDebugVisualization && enable;
+  viewer.scene.debugShowFrustumCulling = showDebugVisualization && enable;
   
   // Force a scene update
   viewer.scene.requestRender();

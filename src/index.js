@@ -72,8 +72,17 @@ import {
         if (e.key === 'F' || e.key === 'f') {
           // Import needed to access the function
           const { toggleFrustumCullingForTesting, ENABLE_FRUSTUM_CULLING } = require('./utils/FixedPerformanceSettings');
-          toggleFrustumCullingForTesting(viewer, !ENABLE_FRUSTUM_CULLING);
+          // Toggle frustum culling without showing the red debug visualization
+          toggleFrustumCullingForTesting(viewer, !ENABLE_FRUSTUM_CULLING, false);
           showErrorMessage(`Frustum Culling: ${!ENABLE_FRUSTUM_CULLING ? 'ON' : 'OFF'}`);
+        }
+        
+        // Press 'D' to toggle frustum culling with debug visualization (red visualization)
+        if (e.key === 'D' || e.key === 'd') {
+          const { toggleFrustumCullingForTesting, ENABLE_FRUSTUM_CULLING } = require('./utils/FixedPerformanceSettings');
+          // Toggle frustum culling WITH debug visualization (will show red planes)
+          toggleFrustumCullingForTesting(viewer, !ENABLE_FRUSTUM_CULLING, true);
+          showErrorMessage(`Frustum Culling with Debug: ${!ENABLE_FRUSTUM_CULLING ? 'ON' : 'OFF'}`);
         }
         
         // Press 'C' to clear the tile cache manually

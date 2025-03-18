@@ -181,9 +181,8 @@ export class TilesetManager {
     // Force all tilesets to trim their caches
     this.viewer.scene.primitives._primitives.forEach(primitive => {
       if (primitive && primitive.constructor && primitive.constructor.name === 'Cesium3DTileset') {
-        // These operations force the tileset to clear its cache
+        // Force the tileset to clear its cache
         primitive.trimLoadedTiles();
-        primitive.unloadTiles();
         
         // Additional cache clearing operations
         if (primitive._cache) {
