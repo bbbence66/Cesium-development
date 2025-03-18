@@ -9,6 +9,9 @@ import {
   Math as CesiumMath
 } from "cesium";
 
+// Import fixed performance settings
+import { getTilesetOptions, applyFixedSettings, ENABLE_FRUSTUM_CULLING } from './FixedPerformanceSettings';
+
 /**
  * Class to manage loading and navigation of 3D Tilesets
  */
@@ -29,7 +32,9 @@ export class TilesetManager {
    */
   setOsmBuildingsTileset(tileset) {
     this.osmBuildingsTileset = tileset;
-    console.log("OSM Buildings tileset reference saved");
+    // Apply fixed performance settings to OSM Buildings tileset
+    applyFixedSettings(tileset, this.viewer);
+    console.log("OSM Buildings tileset reference saved and performance settings applied");
   }
 
   /**
@@ -50,7 +55,9 @@ export class TilesetManager {
             primitive.hasOwnProperty('maximumScreenSpaceError') &&
             primitive !== this.tilesets[Object.keys(this.tilesets)[0]]?.cesiumTileset) {
           this.osmBuildingsTileset = primitive;
-          console.log("OSM Buildings tileset found and referenced");
+          // Apply fixed performance settings to newly found OSM Buildings tileset
+          applyFixedSettings(this.osmBuildingsTileset, this.viewer);
+          console.log("OSM Buildings tileset found, referenced, and performance settings applied");
           break;
         }
       }
@@ -78,7 +85,12 @@ export class TilesetManager {
     try {
       console.log(`Loading tileset: ${name}`);
       
-      const tileset = await Cesium3DTileset.fromUrl(url);
+      // Create tileset with fixed performance optimization settings
+      const tileset = await Cesium3DTileset.fromUrl(url, getTilesetOptions());
+      
+      // Apply our fixed performance settings, passing the viewer
+      applyFixedSettings(tileset, this.viewer);
+      
       this.viewer.scene.primitives.add(tileset);
       
       // Store the tileset with its metadata
@@ -156,6 +168,34 @@ export class TilesetManager {
     } else {
       console.error("No tilesets loaded to navigate to.");
     }
+  }
+
+  /**
+   * Manually clear the tile cache for all loaded tilesets.
+   * This is useful for testing frustum culling - call this when looking away
+   * from a tileset to force unloading of tiles.
+   */
+  clearTileCache() {
+    console.log("Manually clearing tile cache for all tilesets...");
+    
+    // Force all tilesets to trim their caches
+    this.viewer.scene.primitives._primitives.forEach(primitive => {
+      if (primitive && primitive.constructor && primitive.constructor.name === 'Cesium3DTileset') {
+        // These operations force the tileset to clear its cache
+        primitive.trimLoadedTiles();
+        primitive.unloadTiles();
+        
+        // Additional cache clearing operations
+        if (primitive._cache) {
+          primitive._cache.reset();
+        }
+        
+        console.log("Cleared cache for a tileset");
+      }
+    });
+    
+    // Force a scene update
+    this.viewer.scene.requestRender();
   }
 }
 

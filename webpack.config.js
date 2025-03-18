@@ -15,8 +15,8 @@ module.exports = {
     app: "./src/index.js",
   },
   output: {
-    filename: isProduction ? '[name].[contenthash].js' : '[name].js',
-    chunkFilename: isProduction ? '[name].[contenthash].js' : '[name].js',
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].[contenthash].js',
     path: path.resolve(__dirname, "dist"),
     sourcePrefix: "",
     clean: true, // Clean the dist folder before each build
@@ -62,9 +62,7 @@ module.exports = {
         { from: path.join(cesiumSource, "Assets"), to: "Assets" },
         { from: path.join(cesiumSource, "Widgets"), to: "Widgets" },
         // Copy static assets to the dist folder
-        { from: "public", to: "" },
-        // Copy service worker to root
-        { from: "src/serviceWorker.js", to: "serviceWorker.js" }
+        { from: "public", to: "" }
       ],
     }),
     new webpack.DefinePlugin({

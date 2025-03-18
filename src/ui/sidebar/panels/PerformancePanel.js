@@ -55,6 +55,33 @@ export const getPerformancePanelContent = () => {
     </div>
     
     <div class="settings-section">
+      <h4>Advanced Performance Settings</h4>
+      <div class="settings-row">
+        <label for="max-screen-space-error">Max Screen Space Error</label>
+        <input type="range" id="max-screen-space-error" min="8" max="64" step="4" value="32">
+        <span class="value-display">32</span>
+      </div>
+      
+      <div class="settings-row">
+        <label for="max-memory-usage">Memory Usage Limit (MB)</label>
+        <input type="range" id="max-memory-usage" min="64" max="1024" step="64" value="256">
+        <span class="value-display">256 MB</span>
+      </div>
+      
+      <div class="settings-row">
+        <label for="dynamic-sse-density">Dynamic SSE Density</label>
+        <input type="range" id="dynamic-sse-density" min="0.00002" max="0.0001" step="0.00001" value="0.00006">
+        <span class="value-display">0.00006</span>
+      </div>
+      
+      <div class="settings-row">
+        <label for="dynamic-sse-factor">Dynamic SSE Factor</label>
+        <input type="range" id="dynamic-sse-factor" min="1" max="10" step="1" value="6">
+        <span class="value-display">6</span>
+      </div>
+    </div>
+    
+    <div class="settings-section">
       <h4>Optimizations</h4>
       <div class="checkbox-row">
         <input type="checkbox" id="opt-frustum-culling" checked>
@@ -75,6 +102,11 @@ export const getPerformancePanelContent = () => {
         <input type="checkbox" id="opt-shader-caching" checked>
         <label for="opt-shader-caching">Shader Caching</label>
       </div>
+      
+      <div class="checkbox-row">
+        <input type="checkbox" id="opt-foveated-rendering" checked>
+        <label for="opt-foveated-rendering">Foveated Rendering</label>
+      </div>
     </div>
     
     <div class="performance-actions">
@@ -82,6 +114,4 @@ export const getPerformancePanelContent = () => {
       <button class="performance-button secondary">Reset to Default</button>
     </div>
   `;
-};
-
-export default getPerformancePanelContent; 
+}; 

@@ -8,11 +8,13 @@ import icons from './icons/SidebarIcons';
 
 // Import panel contents
 import visualSettingsModule from './panels/VisualSettingsPanel';
-import getPerformancePanelContent from './panels/PerformancePanel';
 import getNavigationPanelContent from './panels/NavigationPanel';
 import getNotesPanelContent from './panels/NotesPanel';
 import getMeasurementPanelContent from './panels/MeasurementPanel';
 import getClippingPanelContent from './panels/ClippingPanel';
+
+// Import panel handlers
+import { initializeVisualSettings } from './panels/VisualSettingsHandler';
 
 // Import CSS for visual settings
 import '../../css/visual-settings.css';
@@ -22,7 +24,7 @@ import '../../css/visual-settings.css';
  * @param {Object} viewer - The Cesium viewer instance
  * @returns {Object} The sidebar manager instance
  */
-export const initializeSidebar = (viewer) => {
+export default function initializeSidebar(viewer) {
   // Initialize the sidebar
   sidebarManager.init();
   
@@ -38,18 +40,8 @@ export const initializeSidebar = (viewer) => {
     group: 'settings',
     onOpen: () => {
       // Initialize the visual settings functionality when the panel is opened
-      visualSettingsModule.initializeVisualSettingsPanel(viewer);
+      initializeVisualSettings(viewer);
     }
-  });
-
-  // Performance Tool
-  sidebarManager.registerTool({
-    id: 'performance',
-    icon: icons.performance,
-    tooltip: 'Performance',
-    title: 'Performance Settings',
-    content: getPerformancePanelContent(),
-    group: 'settings'
   });
 
   // Navigation Tool
@@ -91,39 +83,63 @@ export const initializeSidebar = (viewer) => {
     content: getClippingPanelContent(),
     group: 'analysis'
   });
-  
-  // Info Tool
+
+  // Info Tool - Always present at the bottom of the sidebar
   sidebarManager.registerTool({
     id: 'info',
     icon: icons.info,
-    tooltip: 'Information',
-    title: 'Information',
+    tooltip: 'Info',
+    title: 'About Point Cloud Viewer',
     content: `
-      <div class="info-content">
-        <h4>Point Cloud Viewer</h4>
+      <div class="info-panel">
+        <h3>About Point Cloud Viewer</h3>
         <p>Version 1.0.0</p>
-        <p>A tool for viewing and analyzing point cloud data.</p>
+        <p>A web-based viewer for 3D point clouds built with Cesium.</p>
         
         <h4>Keyboard Shortcuts</h4>
-        <ul class="shortcut-list">
-          <li><span class="key">Space</span> Reset view</li>
-          <li><span class="key">Ctrl+Z</span> Undo</li>
-          <li><span class="key">Ctrl+Y</span> Redo</li>
-          <li><span class="key">Esc</span> Cancel current operation</li>
-        </ul>
+        <div class="shortcuts">
+          <div class="shortcut-row">
+            <div class="shortcut-key">W, A, S, D</div>
+            <div class="shortcut-action">Pan camera</div>
+          </div>
+          <div class="shortcut-row">
+            <div class="shortcut-key">Q, E</div>
+            <div class="shortcut-action">Rise/lower camera</div>
+          </div>
+          <div class="shortcut-row">
+            <div class="shortcut-key">Shift</div>
+            <div class="shortcut-action">Accelerate movement</div>
+          </div>
+          <div class="shortcut-row">
+            <div class="shortcut-key">Esc</div>
+            <div class="shortcut-action">Close sidebar panel</div>
+          </div>
+        </div>
         
         <h4>Mouse Controls</h4>
-        <ul class="shortcut-list">
-          <li><span class="action">Left click + drag</span> Rotate view</li>
-          <li><span class="action">Right click + drag</span> Pan view</li>
-          <li><span class="action">Scroll wheel</span> Zoom in/out</li>
-        </ul>
+        <div class="shortcuts">
+          <div class="shortcut-row">
+            <div class="shortcut-key">Left Click + Drag</div>
+            <div class="shortcut-action">Rotate view</div>
+          </div>
+          <div class="shortcut-row">
+            <div class="shortcut-key">Right Click + Drag</div>
+            <div class="shortcut-action">Pan view</div>
+          </div>
+          <div class="shortcut-row">
+            <div class="shortcut-key">Middle Click + Drag</div>
+            <div class="shortcut-action">Zoom view</div>
+          </div>
+          <div class="shortcut-row">
+            <div class="shortcut-key">Mouse Wheel</div>
+            <div class="shortcut-action">Zoom in/out</div>
+          </div>
+        </div>
       </div>
     `,
-    group: 'help'
+    group: 'help',
+    position: 'bottom'
   });
-  
-  return sidebarManager;
-};
 
-export default initializeSidebar; 
+  return sidebarManager;
+} 

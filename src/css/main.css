@@ -39,23 +39,3 @@ html, body, #cesiumContainer {
   from { opacity: 1; transform: translate(-50%, 0); }
   to { opacity: 0; transform: translate(-50%, -20px); }
 }
-
-/* Cache indicator styling */
-.cache-indicator {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-size: 14px;
-  z-index: 2000;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  pointer-events: none;
-}
-
-.cache-indicator.visible {
-  opacity: 1;
-}

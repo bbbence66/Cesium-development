@@ -25,12 +25,6 @@ import {
   import { createDatasetSelector } from './ui/DatasetSelector';
   import { createLogo } from './ui/Logo';
   
-  // Import service worker registration utility
-  import { registerServiceWorker } from './utils/serviceWorkerRegistration';
-  
-  // Import cache indicator
-  import { initCacheIndicator } from './utils/CacheIndicator';
-  
   // Your access token can be found at: https://cesium.com/ion/tokens.
   Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxMmUwMWI1My1kZTE3LTRjN2QtYjU4OS1mZDM0ODNlYjk1MjYiLCJpZCI6MjgyODY0LCJpYXQiOjE3NDE1OTk1MDN9.N6iesXHoMViCX6RW5EC4z1wmpB3V0bN4V95WvAx3wF8";
   
@@ -38,16 +32,6 @@ import {
    * Main application entry point
    */
   async function startApp() {
-    // Register the service worker for PNTS file caching
-    registerServiceWorker().then(registration => {
-      if (registration) {
-        console.log('Service worker registered for caching PNTS files');
-        
-        // Initialize the cache indicator
-        initCacheIndicator();
-      }
-    });
-    
     // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
     const viewer = new Viewer("cesiumContainer", {
       terrain: Terrain.fromWorldTerrain(),
@@ -78,10 +62,26 @@ import {
       await tilesetManager.navigateToDefault();
       
       // Initialize the sidebar after the point cloud data is loaded
-      initializeSidebar();
+      initializeSidebar(viewer);
       
       // Initialize the dataset selector
       createDatasetSelector(tilesetManager, viewer);
+      
+      // Add keyboard shortcut to toggle frustum culling for testing
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'F' || e.key === 'f') {
+          // Import needed to access the function
+          const { toggleFrustumCullingForTesting, ENABLE_FRUSTUM_CULLING } = require('./utils/FixedPerformanceSettings');
+          toggleFrustumCullingForTesting(viewer, !ENABLE_FRUSTUM_CULLING);
+          showErrorMessage(`Frustum Culling: ${!ENABLE_FRUSTUM_CULLING ? 'ON' : 'OFF'}`);
+        }
+        
+        // Press 'C' to clear the tile cache manually
+        if (e.key === 'C' || e.key === 'c') {
+          tilesetManager.clearTileCache();
+          showErrorMessage("Manually cleared tile cache");
+        }
+      });
     } catch (error) {
       console.error("Error initializing point clouds:", error);
       
@@ -95,7 +95,7 @@ import {
       });
       
       // Still initialize the sidebar even if point clouds failed to load
-      initializeSidebar();
+      initializeSidebar(viewer);
       
       // Create the dataset selector with empty data
       createDatasetSelector(null, viewer);
