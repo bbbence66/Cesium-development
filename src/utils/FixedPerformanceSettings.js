@@ -11,7 +11,7 @@ import { PointCloudShading } from "cesium";
  * The performance quality preset to use
  * Options: 'ultra', 'high', 'medium', 'low'
  */
-export const PERFORMANCE_PRESET = 'medium';
+export let PERFORMANCE_PRESET = 'medium';
 
 /**
  * Control whether frustum culling is enabled
@@ -35,6 +35,55 @@ export const DEBUG_SHOW_FRUSTUM_CULLING = false; // Disabled by default to avoid
 export const CACHE_BYTES = 0; // Set to 0 for most aggressive unloading
 
 /**
+ * List of available presets for easy cycling
+ */
+export const AVAILABLE_PRESETS = ['ultra', 'high', 'medium', 'low', 'lowest'];
+
+/**
+ * Callback function registry for when settings change
+ */
+const settingsChangeCallbacks = [];
+
+/**
+ * Register a callback function to be called when settings change
+ * @param {Function} callback - Function to call when settings change
+ */
+export function onSettingsChange(callback) {
+  if (typeof callback === 'function' && !settingsChangeCallbacks.includes(callback)) {
+    settingsChangeCallbacks.push(callback);
+  }
+}
+
+/**
+ * Remove a previously registered callback function
+ * @param {Function} callback - Function to remove from callbacks
+ */
+export function offSettingsChange(callback) {
+  const index = settingsChangeCallbacks.indexOf(callback);
+  if (index !== -1) {
+    settingsChangeCallbacks.splice(index, 1);
+  }
+}
+
+/**
+ * Notify all registered callbacks that settings have changed
+ */
+function notifySettingsChanged() {
+  const settings = {
+    preset: PERFORMANCE_PRESET,
+    frustumCulling: ENABLE_FRUSTUM_CULLING
+  };
+  
+  settingsChangeCallbacks.forEach(callback => {
+    try {
+      callback(settings);
+    } catch (e) {
+      console.error('Error in settings change callback:', e);
+    }
+  });
+}
+
+/**
  * Performance settings configuration based on preset
  */
 export const PERFORMANCE_SETTINGS = {
@@ -46,7 +95,8 @@ export const PERFORMANCE_SETTINGS = {
     dynamicScreenSpaceErrorFactor: 4,
     foveatedConeSize: 0.1,
     geometricErrorScale: 0.5,
-    maximumAttenuation: 8
+    maximumAttenuation: 8,
+    pointBudget: 5000000  // 5 million points for ultra quality
   },
   
   // High settings - good quality with reasonable performance
@@ -57,7 +107,8 @@ export const PERFORMANCE_SETTINGS = {
     dynamicScreenSpaceErrorFactor: 4,
     foveatedConeSize: 0.15,
     geometricErrorScale: 0.7,
-    maximumAttenuation: 8
+    maximumAttenuation: 8,
+    pointBudget: 3000000  // 3 million points
   },
   
   // Medium settings - balanced performance and quality
@@ -68,7 +119,8 @@ export const PERFORMANCE_SETTINGS = {
     dynamicScreenSpaceErrorFactor: 6,
     foveatedConeSize: 0.2,
     geometricErrorScale: 1.0,
-    maximumAttenuation: 6
+    maximumAttenuation: 6,
+    pointBudget: 2000000  // 2 million points
   },
   
   // Low settings - best performance
@@ -79,7 +131,20 @@ export const PERFORMANCE_SETTINGS = {
     dynamicScreenSpaceErrorFactor: 8,
     foveatedConeSize: 0.3,
     geometricErrorScale: 1.5,
-    maximumAttenuation: 4
+    maximumAttenuation: 4,
+    pointBudget: 1000000  // 1 million points
+  },
+  
+  // Lowest settings - for very performance-critical situations
+  lowest: {
+    maximumScreenSpaceError: 64, // Much higher for better performance
+    maximumMemoryUsage: 64,      // Lower memory usage
+    dynamicScreenSpaceErrorDensity: 0.0001,
+    dynamicScreenSpaceErrorFactor: 10,
+    foveatedConeSize: 0.4,
+    geometricErrorScale: 2.0,
+    maximumAttenuation: 4,
+    pointBudget: 500000  // Half a million points
   }
 };
 
@@ -147,6 +212,24 @@ export function applyFixedSettings(tileset, viewer) {
     eyeDomeLightingStrength: 0.7,
     eyeDomeLightingRadius: 1.0
   });
+  
+  // Apply point budget
+  if (tileset.hasOwnProperty('maximumMemoryUsage')) {
+    tileset.maximumMemoryUsage = settings.maximumMemoryUsage;
+  }
+  
+  // Apply point budget limitation - different properties depending on the Cesium version
+  if (tileset.pointCloudShading && settings.pointBudget) {
+    // When pointCloudShading is accessible, use maximumPointSize
+    if (typeof tileset.pointCloudShading.maximumPointSize === 'number') {
+      tileset.pointCloudShading.maximumPointSize = settings.pointBudget;
+    }
+  }
+  
+  // Also try to set maximumPointsNodeSize if it exists (some Cesium versions)
+  if (typeof tileset.maximumPointsNodeSize !== 'undefined') {
+    tileset.maximumPointsNodeSize = settings.pointBudget;
+  }
   
   // Other optimizations
   tileset.preferLeaves = true;
@@ -240,4 +323,64 @@ export function toggleFrustumCullingForTesting(viewer, enable, showDebugVisualiz
   
   // Force a scene update
   viewer.scene.requestRender();
+  
+  // Notify any registered callbacks about the settings change
+  notifySettingsChanged();
+}
+
+/**
+ * Switch to a different performance preset and apply to all tilesets
+ * @param {string} preset - The preset to switch to ('ultra', 'high', 'medium', 'low')
+ * @param {Cesium.Viewer} viewer - The Cesium viewer instance
+ * @returns {boolean} Whether the switch was successful
+ */
+export function switchPerformancePreset(preset, viewer) {
+  if (!AVAILABLE_PRESETS.includes(preset)) {
+    console.error(`Invalid preset: ${preset}. Must be one of: ${AVAILABLE_PRESETS.join(', ')}`);
+    return false;
+  }
+  
+  // Update the current preset
+  PERFORMANCE_PRESET = preset;
+  console.log(`Switched to ${preset.toUpperCase()} performance preset`);
+  
+  // Apply to all tilesets in the scene
+  if (viewer) {
+    viewer.scene.primitives._primitives.forEach(primitive => {
+      if (primitive && primitive.constructor && primitive.constructor.name === 'Cesium3DTileset') {
+        applyFixedSettings(primitive, viewer);
+      }
+    });
+    
+    // Force a scene update
+    viewer.scene.requestRender();
+  }
+  
+  // Notify any registered callbacks about the settings change
+  notifySettingsChanged();
+  
+  return true;
+}
+
+/**
+ * Cycle to the next or previous performance preset
+ * @param {Cesium.Viewer} viewer - The Cesium viewer instance
+ * @param {boolean} [next=true] - Whether to cycle to the next (true) or previous (false) preset
+ * @returns {string} The new preset
+ */
+export function cyclePerformancePreset(viewer, next = true) {
+  const currentIndex = AVAILABLE_PRESETS.indexOf(PERFORMANCE_PRESET);
+  let newIndex;
+  
+  if (next) {
+    // Cycle to next preset (wrapping around to the start if necessary)
+    newIndex = (currentIndex + 1) % AVAILABLE_PRESETS.length;
+  } else {
+    // Cycle to previous preset (wrapping around to the end if necessary)
+    newIndex = (currentIndex - 1 + AVAILABLE_PRESETS.length) % AVAILABLE_PRESETS.length;
+  }
+  
+  const newPreset = AVAILABLE_PRESETS[newIndex];
+  switchPerformancePreset(newPreset, viewer);
+  return newPreset;
 } 

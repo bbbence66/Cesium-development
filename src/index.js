@@ -25,6 +25,9 @@ import {
   import { createDatasetSelector } from './ui/DatasetSelector';
   import { createLogo } from './ui/Logo';
   
+  // Import the performance info display
+  import { createPerformanceInfoDisplay } from './ui/PerformanceInfoDisplay';
+  
   // Your access token can be found at: https://cesium.com/ion/tokens.
   Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxMmUwMWI1My1kZTE3LTRjN2QtYjU4OS1mZDM0ODNlYjk1MjYiLCJpZCI6MjgyODY0LCJpYXQiOjE3NDE1OTk1MDN9.N6iesXHoMViCX6RW5EC4z1wmpB3V0bN4V95WvAx3wF8";
   
@@ -67,6 +70,9 @@ import {
       // Initialize the dataset selector
       createDatasetSelector(tilesetManager, viewer);
       
+      // Create a simple performance info display
+      createPerformanceInfoDisplay(viewer);
+      
       // Add keyboard shortcut to toggle frustum culling for testing
       document.addEventListener('keydown', (e) => {
         if (e.key === 'F' || e.key === 'f') {
@@ -89,6 +95,34 @@ import {
         if (e.key === 'C' || e.key === 'c') {
           tilesetManager.clearTileCache();
           showErrorMessage("Manually cleared tile cache");
+        }
+        
+        // Press '1', '2', '3', '4' to directly switch to performance presets
+        if (e.key === '1' || e.key === '2' || e.key === '3' || e.key === '4') {
+          const { switchPerformancePreset, AVAILABLE_PRESETS } = require('./utils/FixedPerformanceSettings');
+          
+          let presetIndex = parseInt(e.key) - 1; // Convert key to 0-based index
+          if (presetIndex >= 0 && presetIndex < AVAILABLE_PRESETS.length) {
+            const preset = AVAILABLE_PRESETS[presetIndex];
+            switchPerformancePreset(preset, viewer);
+            showErrorMessage(`Performance Preset: ${preset.toUpperCase()}`);
+          }
+        }
+        
+        // Press '+' or '=' to cycle to higher quality preset
+        if (e.key === '+' || e.key === '=') {
+          const { cyclePerformancePreset } = require('./utils/FixedPerformanceSettings');
+          // Cycle to higher quality (lower index in AVAILABLE_PRESETS)
+          const newPreset = cyclePerformancePreset(viewer, false);
+          showErrorMessage(`Performance Preset: ${newPreset.toUpperCase()}`);
+        }
+        
+        // Press '-' or '_' to cycle to lower quality preset
+        if (e.key === '-' || e.key === '_') {
+          const { cyclePerformancePreset } = require('./utils/FixedPerformanceSettings');
+          // Cycle to lower quality (higher index in AVAILABLE_PRESETS)
+          const newPreset = cyclePerformancePreset(viewer, true);
+          showErrorMessage(`Performance Preset: ${newPreset.toUpperCase()}`);
         }
       });
     } catch (error) {
